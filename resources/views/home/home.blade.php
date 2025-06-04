@@ -1,15 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Inicio</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Para ti</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Siguiendo</button>
-        </div>
-    </div>
-</div>
+
 
 <!-- Crear publicación -->
 <div class="card mb-4">
@@ -34,7 +26,7 @@
 
 <!-- Publicaciones -->
   @foreach(\App\Publicacione::orderBy('created_at', 'desc')->get() as $publi)
-  <div class="card mb-3">
+  <div class="card mb-3" style="cursor:pointer;" onclick="window.location.href='{{ route('publicaciones.publicacion', ['id' => $publi->publ_id]) }}'">
       <div class="card-body">
           <div class="d-flex">
               <img src="https://via.placeholder.com/50" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
@@ -116,6 +108,8 @@
             }
         });
     });
+
+ 
 });
   </script>
 @endsection

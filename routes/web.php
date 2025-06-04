@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home.home');
 });
 
 Auth::routes();
@@ -51,3 +51,6 @@ Route::post('/profile/update', 'ProfileController@update')->name('profile.update
 
 
 Route::post('/publicaciones', 'PublicacioneController@store')->name('publicaciones.store');
+Route::get('/publicacion/{id}', 'PublicacioneController@publicacion')->name('publicaciones.publicacion');
+
+Route::post('/comentario/create', 'ComentarioController@create')->name('comentario.create');

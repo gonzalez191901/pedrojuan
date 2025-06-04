@@ -20,4 +20,14 @@ class PublicacioneController extends Controller
         
         return response()->json(['message' => 'Publicación creada con éxito']);
     }
+
+    public function publicacion($id){
+
+   
+        $publicacion = Publicacione::find($id);
+
+       // dd($publicacion->comentarios);
+
+        return view('publicacion.publicacion',compact('publicacion'));
+    }
 }
