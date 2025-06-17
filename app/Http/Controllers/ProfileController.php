@@ -9,9 +9,10 @@ use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
 {
-    public function show($username)
+    public function show($id)
     {
-        $user = \App\User::where('id', 1)->firstOrFail();
+        //$user = \App\User::where('id', 1)->firstOrFail();
+        $user = \App\User::where('id', $id)->firstOrFail();
         
         /*$posts = $user->posts()
             ->withCount(['comments', 'retweets', 'likes'])

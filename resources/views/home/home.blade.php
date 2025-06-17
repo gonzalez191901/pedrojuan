@@ -7,9 +7,10 @@
 <div class="card mb-4">
     <div class="card-body">
         <div class="d-flex">
-            <img src="https://via.placeholder.com/50" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
+            <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
             <div class="w-100">
-                <textarea class="form-control border-0" rows="3" placeholder="¿Qué está pasando?"></textarea>
+                <input type="text" class="form-control" name="tittle" id="tittle" placeholder="Titulo" style="width:50%;">
+                <textarea class="form-control border-0" rows="3" placeholder="¿Qué está pasando?" id="contenido"></textarea>
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div>
                         <button class="btn btn-sm text-primary"><i class="far fa-image"></i></button>
@@ -29,7 +30,7 @@
   <div class="card mb-3" style="cursor:pointer;" onclick="window.location.href='{{ route('publicaciones.publicacion', ['id' => $publi->publ_id]) }}'">
       <div class="card-body">
           <div class="d-flex">
-              <img src="https://via.placeholder.com/50" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
+              <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
               <div class="w-100">
                   <div class="d-flex justify-content-between align-items-center mb-1">
                       <div>
@@ -38,12 +39,12 @@
                       </div>
                       <button class="btn btn-sm text-muted"><i class="fas fa-ellipsis-h"></i></button>
                   </div>
+                  <strong> {{ $publi->tittle }}</strong>
                   <p class="mb-2"> {{ $publi->publ_comentario }}</p>
                   <div class="d-flex justify-content-between text-muted mt-3">
-                      <button class="btn btn-sm text-muted"><i class="far fa-comment"></i> 15</button>
-                      <button class="btn btn-sm text-muted"><i class="fas fa-retweet"></i> 5</button>
-                      <button class="btn btn-sm text-muted"><i class="far fa-heart"></i> 32</button>
-                      <button class="btn btn-sm text-muted"><i class="far fa-share-square"></i></button>
+                      <button class="btn btn-sm text-muted"><i class="far fa-comment"></i>{{$publi->comentarios->count()}}</button>
+                    
+                      <button class="btn btn-sm text-muted"><i class="far fa-heart"></i>{{$publi->likes->count()}}</button>
                   </div>
               </div>
           </div>
@@ -58,7 +59,8 @@
         e.preventDefault();
         
         // Obtener el contenido del textarea
-        var contenido = $('.form-control').val().trim();
+        var contenido = $('#contenido').val().trim();
+        var tittle = $('#tittle').val().trim();
         
         // Verificar que el contenido no esté vacío
         if (contenido === '') {
@@ -70,6 +72,16 @@
             });
             return;
         }
+
+        if (tittle === '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Por favor escribe un titulo',
+                confirmButtonColor: '#3085d6',
+            });
+            return;
+        }
         
         // Enviar la solicitud AJAX
         $.ajax({
@@ -77,7 +89,8 @@
             method: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
-                comentario: contenido
+                comentario: contenido,
+                tittle:tittle,
             },
             success: function(response) {
                 // Limpiar el textarea después de publicar

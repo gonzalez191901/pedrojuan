@@ -8,8 +8,9 @@
                 <div class="card-body p-5">
                     <!-- Logo -->
                     <div class="text-center mb-4">
+                        <img src="{{ asset('img/Logo_IAEDPG.png') }}" alt="Usuario" width="150" height="150" class="text-center">    
                         <i class="fab fa-x-twitter text-primary fa-3x"></i>
-                        <h2 class="mt-3 font-weight-bold">Inicia sesión en Microblog</h2>
+                        <h2 class="mt-3 font-weight-bold">Inicia sesión en el Foro de IAEDPG </h2>
                     </div>
 
                     <!-- Formulario de login -->
@@ -63,7 +64,7 @@
                     </div>
 
                     <!-- Botones de redes sociales -->
-                    <div class="social-login">
+                    <!--<div class="social-login">
                         <a href="{{ url('/auth/facebook') }}" class="btn btn-outline-primary rounded-pill py-2 mb-3 btn-block">
                             <i class="fab fa-facebook-f mr-2"></i> Continuar con Facebook
                         </a>
@@ -75,7 +76,7 @@
                         <a href="{{ url('/auth/instagram') }}" class="btn btn-outline-dark rounded-pill py-2 mb-3 btn-block">
                             <i class="fab fa-instagram mr-2"></i> Continuar con Instagram
                         </a>
-                    </div>
+                    </div>-->
 
                     <!-- Enlace a registro -->
                     <div class="text-center mt-4">

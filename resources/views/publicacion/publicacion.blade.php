@@ -7,27 +7,26 @@
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
             <div class="d-flex align-items-start mb-3">
-                <img src="https://via.placeholder.com/50" alt="Autor" class="rounded-circle mr-3">
+                <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
                 <div>
                     <h5 class="mb-1">{{ $publicacion->user->name }}</h5>
                     <small class="text-muted">{{ $publicacion->created_at->diffForHumans() }}</small>
                 </div>
             </div>
             
-            <h4 class="card-title">{{ $publicacion->titulo }}</h4>
-            <p class="card-text">{{ $publicacion->contenido }}</p>
+            <h4 class="card-title">{{ $publicacion->tittle }}</h4>
+            <p class="card-text">{{ $publicacion->publ_comentario }}</p>
+
+            <div>
+
+            </div>
             
             <div class="d-flex justify-content-between align-items-center mt-3">
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-outline-secondary">
-                        <i class="far fa-thumbs-up"></i> Me gusta ({{ $publicacion->likes_count }})
+                        <i class="far fa-thumbs-up"></i> Me gusta {{ $publicacion->likes->count() }}
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                        <i class="far fa-comment"></i> Comentar
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                        <i class="fas fa-share"></i> Compartir
-                    </button>
+                    
                 </div>
                 @if(auth()->id() == $publicacion->user_id)
                 <div class="dropdown">
@@ -49,7 +48,7 @@
         <div class="card-body">
             <form action="{{ route('comentario.create') }}" method="POST">
                 @csrf
-                <input type="hidden" name="publicacion_id" value="{{ $publicacion->publ_id }}">
+                <input type="hidden" name="publicacion_id" value="{{ $publicacion->publ_id }}" required="">
                 <div class="form-group">
                     <textarea class="form-control" name="contenido" rows="3" placeholder="Escribe tu comentario..." required></textarea>
                 </div>
@@ -66,7 +65,7 @@
         <div class="card mb-3 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-start mb-2">
-                    <img src="https://via.placeholder.com/40" alt="Autor" class="rounded-circle mr-3">
+                    <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="mb-0">{{ $comentario->user->name }}</h6>
@@ -75,8 +74,8 @@
                         <p class="mb-2 mt-2">{{ $comentario->come_comentario }}</p>
                         
                         <div class="d-flex">
-                            <button class="btn btn-sm btn-outline-secondary mr-2">
-                                <i class="far fa-thumbs-up"></i> ($comentario->likes_count)
+                            <button class="btn btn-sm btn-outline-secondary mr-2" onclick="dar_like()">
+                                <i class="far fa-thumbs-up"></i> 
                             </button>
                             @if(auth()->id() == $comentario->come_id_user)
                             <form action="" method="POST" class="d-inline">
@@ -127,5 +126,27 @@
             }
         });
     }
+
+    function dar_like(){
+
+        
+    }
+
+    $(document).ready(function() {
+    // Selecciona todos los textarea o usa un ID específico
+    $('textarea').on('input', function() {
+        // Obtiene el valor actual
+        let value = $(this).val();
+        
+        // Elimina espacios al principio
+        value = value.replace(/^\s+/, '');
+        
+        // Reemplaza múltiples espacios por uno solo (opcional)
+        value = value.replace(/\s+/g, ' ');
+        
+        // Actualiza el valor del textarea
+        $(this).val(value);
+    });
+});
 </script>
 @endsection
