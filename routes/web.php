@@ -42,4 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/publicaciones', 'PublicacioneController@store')->name('publicaciones.store');
     Route::get('/publicacion/{id}', 'PublicacioneController@publicacion')->name('publicaciones.publicacion');
     Route::post('/comentario/create', 'ComentarioController@create')->name('comentario.create');
+    Route::post('/comentario/delete', 'ComentarioController@delete')->name('comentario.delete');
+    Route::post('/like/add', 'LikeController@create')->name('like.add');
+    Route::post('/like/comentario/add', 'LikeController@createComentario')->name('like.add.comentario');
 });

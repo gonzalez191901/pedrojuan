@@ -22,6 +22,6 @@ class Publicacione extends Model
 
     public function likes()
     {
-        return $this->hasMany(Like::class, 'come_publ_id' , 'id_publicacion');
+        return $this->hasMany(Like::class, 'id_publicacion' , 'publ_id');
     }
 }
