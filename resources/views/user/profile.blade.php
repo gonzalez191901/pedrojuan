@@ -2,17 +2,18 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row">
+    <div class="container">
  
         
         <!-- Contenido principal -->
         <main role="main" >
             <!-- Header del perfil -->
-            <div class="profile-header">
+            <div class="profile-header" style="width:100%;">
                 <!-- Banner del perfil -->
-                <div class="profile-banner" style="height: 200px; background-color: #1DA1F2; position: relative;">
+                <div class="profile-banner" style="height: 200px; background-color: #1DA1F2; position: relative; ">
                     <div class="profile-avatar" style="position: absolute; bottom: -50px; left: 20px;">
-                        <img src="{{ $user->avatar ?? 'https://via.placeholder.com/150' }}" alt="Avatar" class="rounded-circle border border-4 border-white" width="150" height="150">
+                    <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">    
+                    <!--<img src="{{ $user->avatar ?? 'https://via.placeholder.com/150' }}" alt="Avatar" class="rounded-circle border border-4 border-white" width="150" height="150">-->
                     </div>
                     <div class="profile-actions" style="position: absolute; bottom: 20px; right: 20px;">
                         @if(auth()->id() === $user->id)
@@ -32,8 +33,8 @@
                 
                 <!-- Información del usuario -->
                 <div class="profile-info mt-5 pt-4 px-3">
-                    <h2 class="font-weight-bold mb-1">{{ $user->name }}</h2>
-                    <p class="text-muted mb-1">@{{ $user->username }}</p>
+                    <h2 class="font-weight-bold mb-1">{{ $user->username }}</h2>
+                   
                     
                     @if($user->bio)
                         <p class="my-3">{{ $user->bio }}</p>
@@ -70,51 +71,49 @@
                 </div>
                 
                 <!-- Pestañas de navegación -->
-                <ul class="nav nav-tabs border-0" id="profileTabs" role="tablist">
+                <ul class="nav nav-tabs border-0" id="profileTabs" role="tablist" style="width:100%;">
                     <li class="nav-item">
                         <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab">Publicaciones</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="replies-tab" data-toggle="tab" href="#replies" role="tab">Respuestas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="media-tab" data-toggle="tab" href="#media" role="tab">Multimedia</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="likes-tab" data-toggle="tab" href="#likes" role="tab">Me gusta</a>
-                    </li>
+         
+                    
                 </ul>
             </div>
             
             <!-- Contenido de las pestañas -->
             <div class="tab-content" id="profileTabsContent">
                 <div class="tab-pane fade show active" id="posts" role="tabpanel">
-                   
+                   @forelse(\App\Publicacione::orderBy('created_at', 'desc')->where('publ_id_user',$user->id)->get() as $publi)
+                    <div class="card mb-3" style="cursor:pointer;" onclick="window.location.href='{{ route('publicaciones.publicacion', ['id' => $publi->publ_id]) }}'">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
+                                <div class="w-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div>
+                                            <strong>{{ $publi->user->name }}</strong>
+                                            <span class="text-muted ml-2">· 2h</span>
+                                        </div>
+                                        <button class="btn btn-sm text-muted"><i class="fas fa-ellipsis-h"></i></button>
+                                    </div>
+                                    <strong> {{ $publi->tittle }}</strong>
+                                    <p class="mb-2"> {{ $publi->publ_comentario }}</p>
+                                    <div class="d-flex justify-content-between text-muted mt-3">
+                                        <button class="btn btn-sm text-muted"><i class="far fa-comment"></i> {{$publi->comentarios->count()}}</button>
+                                        <button class="btn btn-sm text-muted"><i class="far fa-heart"></i>{{$publi->likes->count()}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="alert alert-info">No hay publicaciones!</div>
+                    @endforelse
                 </div>
                 
-                <div class="tab-pane fade" id="replies" role="tabpanel">
-                    <div class="text-center py-5">
-                        <i class="far fa-comment-dots fa-3x text-muted mb-3"></i>
-                        <h4>No hay respuestas todavía</h4>
-                        <p class="text-muted">Cuando {{ $user->username }} responda a publicaciones, aparecerán aquí.</p>
-                    </div>
-                </div>
+              
                 
-                <div class="tab-pane fade" id="media" role="tabpanel">
-                    <div class="text-center py-5">
-                        <i class="far fa-image fa-3x text-muted mb-3"></i>
-                        <h4>No hay multimedia todavía</h4>
-                        <p class="text-muted">Cuando {{ $user->username }} publique fotos o videos, aparecerán aquí.</p>
-                    </div>
-                </div>
                 
-                <div class="tab-pane fade" id="likes" role="tabpanel">
-                    <div class="text-center py-5">
-                        <i class="far fa-heart fa-3x text-muted mb-3"></i>
-                        <h4>No hay me gusta todavía</h4>
-                        <p class="text-muted">Los posts que a {{ $user->username }} le gusten aparecerán aquí.</p>
-                    </div>
-                </div>
             </div>
         </main>
         
@@ -136,7 +135,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+            <form method="POST" action="" enctype="multipart/form-data" id="form_update">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
@@ -145,29 +144,19 @@
                         <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
                     </div>
                     <div class="form-group">
-                        <label for="username">Nombre de usuario</label>
-                        <input type="text" class="form-control" id="username" name="username" value="{{ $user->username }}">
+                        <label for="last_name">Apellido</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ $user->last_name }}">
                     </div>
                     <div class="form-group">
-                        <label for="bio">Biografía</label>
-                        <textarea class="form-control" id="bio" name="bio" rows="3">{{ $user->bio }}</textarea>
+                        <label for="username">Username</label>
+                        <input id="username" type="username" class="form-control" name="username" value="{{ $user->username }}">
                     </div>
+                    
                     <div class="form-group">
-                        <label for="location">Ubicación</label>
-                        <input type="text" class="form-control" id="location" name="location" value="{{ $user->location }}">
+                        <label for="username">Teléfono</label>
+                        <input type="text" class="form-control" id="phone" name="phone" value="{{ $user->phone }}">
                     </div>
-                    <div class="form-group">
-                        <label for="website">Sitio web</label>
-                        <input type="url" class="form-control" id="website" name="website" value="{{ $user->website }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="avatar">Foto de perfil</label>
-                        <input type="file" class="form-control-file" id="avatar" name="avatar">
-                    </div>
-                    <div class="form-group">
-                        <label for="banner">Foto de portada</label>
-                        <input type="file" class="form-control-file" id="banner" name="banner">
-                    </div>
+                   
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary rounded-pill" data-dismiss="modal">Cancelar</button>
@@ -190,6 +179,73 @@
         $('#profileTabs a').on('click', function (e) {
             e.preventDefault();
             $(this).tab('show');
+        });
+
+
+        $('#form_update').submit(function(e) {
+            e.preventDefault();
+            
+            $.ajax({
+                url: '{{ route('profile.update') }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    name: $("#name").val(),
+                    last_name: $("#last_name").val(),
+                    username: $("#username").val(),
+                    phone: $("#phone").val(),
+                },
+                success: function(response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: response.message || 'Perfil actualizado correctamente',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    setTimeout(() => location.reload(), 1500);
+                },
+                error: function(xhr) {
+                    let errors = xhr.responseJSON?.errors;
+                    let errorMessage = '';
+
+                    // Limpia errores previos y resetea estilos
+                    $('.invalid-feedback').remove();
+                    $('.is-invalid').removeClass('is-invalid');
+
+                    if (errors) {
+                        // Muestra errores debajo de cada campo
+                        $.each(errors, function(field, messages) {
+                            let inputField = $(`#${field}`); // Busca el campo por ID
+                            if (inputField.length) {
+                                inputField.addClass('is-invalid'); // Añade clase Bootstrap para error
+                                inputField.after(
+                                    `<div class="invalid-feedback text-danger">${messages.join('<br>')}</div>`
+                                );
+                            } else {
+                                errorMessage += `${messages.join('<br>')}<br>`;
+                            }
+                        });
+
+                        // Si hay errores globales (no asociados a un campo)
+                        if (errorMessage) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error de validación',
+                                html: errorMessage,
+                                confirmButtonColor: '#d33',
+                            });
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Error desconocido',
+                            confirmButtonColor: '#d33',
+                        });
+                    }
+                }
+            });
         });
     });
 </script>

@@ -35,6 +35,14 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="form-group">
+                            <input id="username" type="username" class="form-control rounded-pill py-3 @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required placeholder="Username">
+                            @error('username')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
 
                         <div class="form-group">
                             <input id="email" type="email" class="form-control rounded-pill py-3 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Correo electrónico">
@@ -107,7 +115,7 @@
                     </div>
 
                     <!-- Botones de redes sociales -->
-                    <div class="social-login">
+                    <!--<div class="social-login">
                         <a href="{{ url('/auth/facebook') }}" class="btn btn-outline-primary rounded-pill py-2 mb-3 btn-block">
                             <i class="fab fa-facebook-f mr-2"></i> Continuar con Facebook
                         </a>
@@ -119,7 +127,7 @@
                         <a href="{{ url('/auth/instagram') }}" class="btn btn-outline-dark rounded-pill py-2 mb-3 btn-block">
                             <i class="fab fa-instagram mr-2"></i> Continuar con Instagram
                         </a>
-                    </div>
+                    </div>-->
 
                     <!-- Enlace a login -->
                     <div class="text-center mt-4">

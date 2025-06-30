@@ -9,9 +9,10 @@ use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
 {
-    public function show($username)
+    public function show($id)
     {
-        $user = \App\User::where('id', 1)->firstOrFail();
+        //$user = \App\User::where('id', 1)->firstOrFail();
+        $user = \App\User::where('id', $id)->firstOrFail();
         
         /*$posts = $user->posts()
             ->withCount(['comments', 'retweets', 'likes'])
@@ -26,21 +27,28 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
+
         
         $request->validate([
             'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,'.$user->id,
-            'bio' => 'nullable|string|max:160',
-            'location' => 'nullable|string|max:30',
-            'website' => 'nullable|url|max:100',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'phone' => 'required|string|max:20',
+            
+            /*'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',*/
         ]);
+
+
+        $user->name = $request->name;
+        $user->last_name = $request->last_name;
+        $user->username = $request->username;
+        $user->phone = $request->phone;
+        $user->update();
         
-        $data = $request->only(['name', 'username', 'bio', 'location', 'website']);
         
         // Procesar avatar
-        if ($request->hasFile('avatar')) {
+        /*if ($request->hasFile('avatar')) {
             $avatar = $request->file('avatar');
             $filename = 'avatars/'.$user->id.'_'.time().'.'.$avatar->getClientOriginalExtension();
             
@@ -71,10 +79,12 @@ class ProfileController extends Controller
             }
             
             $data['banner'] = $filename;
-        }
+        }*/
         
-        $user->update($data);
         
-        return redirect()->back()->with('success', 'Perfil actualizado correctamente');
+        
+        return response()->json([
+            'message' => 'Perfil actualizado correctamente',
+        ]);
     }
 }

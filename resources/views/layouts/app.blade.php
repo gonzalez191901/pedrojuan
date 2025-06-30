@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ config('app.name', 'Microblog') }}</title>
+    <title>Pedro Gual</title>
     
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -22,50 +22,64 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar izquierdo -->
+           @auth
+            <!-- Sidebar izquierdo -->
             <div class="col-md-2 col-lg-2 d-none d-md-block bg-dark sidebar vh-100 sticky-top">
                 <div class="sidebar-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item mb-4">
-                            <a class="nav-link text-white" href="#">
-                                <i class="fab fa-x-twitter fa-2x"></i>
+                            <a class="nav-link text-white" href="#">                               
+                                <img src="{{ asset('img/Logo_Blanco.png') }}" alt="Usuario" width="75px" height="75px" class="text-center">
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white active" href="#">
+                            <a class="nav-link text-white active" href="{{ route('inicio') }}">
                                 <i class="fas fa-home mr-2"></i> Inicio
                             </a>
                         </li>
                         
-                        <li class="nav-item">
+                        <!--<li class="nav-item">
                             <a class="nav-link text-white" href="#">
                                 <i class="fas fa-bell mr-2"></i> Notificaciones
                             </a>
-                        </li>
+                        </li>-->
                         
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="profile/trytrytr">
+                            <a class="nav-link text-white" href="{{ route('profile', ['username' => Auth::user()->id]) }}">
                                 <i class="fas fa-user mr-2"></i> Perfil
                             </a>
                         </li>
                         
                     </ul>
                     
-                    <button class="btn btn-primary btn-block rounded-pill mt-3">Publicar</button>
+                    <!--<button class="btn btn-primary btn-block rounded-pill mt-3">Publicar</button>-->
                     
                     <div class="dropdown mt-5">
                         <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#" id="dropdownUser1" data-toggle="dropdown" aria-expanded="false">
-                            <img src="https://via.placeholder.com/40" alt="Usuario" width="32" height="32" class="rounded-circle mr-2">
-                            <strong>Usuario</strong>
+                            <img src="{{ Auth::user()->imagen_perfil ? asset('storage/'.Auth::user()->imagen_perfil) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=random' }}" 
+                                alt="{{ Auth::user()->name }}" 
+                                width="32" 
+                                height="32" 
+                                class="rounded-circle mr-2">
+                            <strong>{{ Auth::user()->username }}</strong>
                         </a>
                         <div class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                            <a class="dropdown-item" href="#">Perfil</a>
-                            <a class="dropdown-item" href="#">Configuración</a>
+                            <a class="dropdown-item" href="{{ route('profile', ['username' => Auth::user()->id]) }}">Perfil</a>
+                            <!--<a class="dropdown-item" href="#">Configuración</a>-->
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Cerrar sesión</a>
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Cerrar sesión
+                            </a>
+
+                            <!-- Formulario oculto para el logout -->
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+        @endauth
             
             <!-- Contenido principal -->
        

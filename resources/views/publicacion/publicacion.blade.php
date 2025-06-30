@@ -7,27 +7,26 @@
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
             <div class="d-flex align-items-start mb-3">
-                <img src="https://via.placeholder.com/50" alt="Autor" class="rounded-circle mr-3">
+                <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
                 <div>
                     <h5 class="mb-1">{{ $publicacion->user->name }}</h5>
                     <small class="text-muted">{{ $publicacion->created_at->diffForHumans() }}</small>
                 </div>
             </div>
             
-            <h4 class="card-title">{{ $publicacion->titulo }}</h4>
-            <p class="card-text">{{ $publicacion->contenido }}</p>
-            
+            <h4 class="card-title">{{ $publicacion->tittle }}</h4>
+            <p class="card-text">{{ $publicacion->publ_comentario }}</p>
+
+            <div>
+
+            </div>
+        
             <div class="d-flex justify-content-between align-items-center mt-3">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                        <i class="far fa-thumbs-up"></i> Me gusta ({{ $publicacion->likes_count }})
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="dar_like({{$publicacion->publ_id}})">
+                        <i class="far fa-heart"></i> Me gusta <span id="contador_likes">{{ $publicacion->likes->count() }}</span> 
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                        <i class="far fa-comment"></i> Comentar
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                        <i class="fas fa-share"></i> Compartir
-                    </button>
+                    
                 </div>
                 @if(auth()->id() == $publicacion->user_id)
                 <div class="dropdown">
@@ -49,7 +48,7 @@
         <div class="card-body">
             <form action="{{ route('comentario.create') }}" method="POST">
                 @csrf
-                <input type="hidden" name="publicacion_id" value="{{ $publicacion->publ_id }}">
+                <input type="hidden" name="publicacion_id" value="{{ $publicacion->publ_id }}" required="">
                 <div class="form-group">
                     <textarea class="form-control" name="contenido" rows="3" placeholder="Escribe tu comentario..." required></textarea>
                 </div>
@@ -60,13 +59,14 @@
 
     <!-- Lista de Comentarios -->
     <div class="mb-4">
-        <h5 class="mb-3">Comentarios ({{ $publicacion->comentarios_count }})</h5>
+        <h5 class="mb-3">Comentarios  <span id="contador_comentario">{{ $publicacion->comentarios->count() }}</span></h5>
+        
         
         @forelse($publicacion->comentarios->sortByDesc('created_at') as $comentario)
-        <div class="card mb-3 shadow-sm">
+        <div class="card mb-3 shadow-sm" id="div_comentario_{{$comentario->come_id}}">
             <div class="card-body">
                 <div class="d-flex align-items-start mb-2">
-                    <img src="https://via.placeholder.com/40" alt="Autor" class="rounded-circle mr-3">
+                    <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="mb-0">{{ $comentario->user->name }}</h6>
@@ -75,14 +75,14 @@
                         <p class="mb-2 mt-2">{{ $comentario->come_comentario }}</p>
                         
                         <div class="d-flex">
-                            <button class="btn btn-sm btn-outline-secondary mr-2">
-                                <i class="far fa-thumbs-up"></i> ($comentario->likes_count)
+                            <button class="btn btn-sm btn-outline-secondary mr-2" onclick="like_comentario({{ $comentario->come_id }})" >
+                               <i class="far fa-heart"></i> <span id="comentario_{{$comentario->come_id}}">{{$comentario->likes->count()}}</span>
                             </button>
                             @if(auth()->id() == $comentario->come_id_user)
                             <form action="" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmarEliminacion({{$comentario->come_id}})">Eliminar</button>
                             </form>
                             @endif
                         </div>
@@ -94,7 +94,7 @@
         <div class="alert alert-info">No hay comentarios aún. ¡Sé el primero en comentar!</div>
         @endforelse
         
-         $publicacion->comentarios->links()  <!-- Paginación -->
+         
     </div>
 </div>
 @endsection
@@ -113,19 +113,82 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // Enviar formulario de eliminación
-                fetch(`/publicaciones/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if(response.ok) {
-                        window.location.href = '{{ route("home") }}';
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('comentario.delete') }}",
+                    data: { 
+                        id: id,
+                        _token: "{{ csrf_token() }}"  // Opcional si ya usas $.ajaxSetup
+                    },
+                    success: function (data) {
+                        console.log(data);
+                         $("#div_comentario_"+id).hide();
+                         let contador = parseInt($("#contador_comentario").text());
+                         $("#contador_comentario").html(contador - 1);
+                        
+                    },
+                    error: function (jQXHR, textStatus, errorMessage) {
+                        console.log("Error:", jQXHR.responseJSON); // Mejor manejo de errores
                     }
                 });
             }
         });
     }
+
+    function dar_like(id){
+    
+
+       $.ajax({
+            type: "POST",
+            url: "{{ route('like.add') }}",
+            data: { 
+                id: id,
+                _token: "{{ csrf_token() }}"  // Opcional si ya usas $.ajaxSetup
+            },
+            success: function (data) {
+                console.log(data);
+                $("#contador_likes").html(data.length);
+            },
+            error: function (jQXHR, textStatus, errorMessage) {
+                console.log("Error:", jQXHR.responseJSON); // Mejor manejo de errores
+            }
+        });
+        
+    }
+
+    function like_comentario(id){
+        $.ajax({
+            type: "POST",
+            url: "{{ route('like.add.comentario') }}",
+            data: { 
+                id: id,
+                _token: "{{ csrf_token() }}"  // Opcional si ya usas $.ajaxSetup
+            },
+            success: function (data) {
+                console.log(data);
+                $("#comentario_"+id).html(data.length);
+            },
+            error: function (jQXHR, textStatus, errorMessage) {
+                console.log("Error:", jQXHR.responseJSON); // Mejor manejo de errores
+            }
+        });
+    }
+
+    $(document).ready(function() {
+    // Selecciona todos los textarea o usa un ID específico
+    $('textarea').on('input', function() {
+        // Obtiene el valor actual
+        let value = $(this).val();
+        
+        // Elimina espacios al principio
+        value = value.replace(/^\s+/, '');
+        
+        // Reemplaza múltiples espacios por uno solo (opcional)
+        value = value.replace(/\s+/g, ' ');
+        
+        // Actualiza el valor del textarea
+        $(this).val(value);
+    });
+});
 </script>
 @endsection

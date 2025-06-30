@@ -21,4 +21,12 @@ class ComentarioController extends Controller
         return redirect()->route('publicaciones.publicacion', ['id' => $request->publicacion_id]);
 
     }
+
+    public function delete(Request $request){
+
+        $comen = Comentario::find($request->id);
+        $comen->delete();
+
+        return 1;
+    }
 }
