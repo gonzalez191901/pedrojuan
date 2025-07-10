@@ -12,7 +12,7 @@
                 <!-- Banner del perfil -->
                 <div class="profile-banner" style="height: 200px; background-color: #1DA1F2; position: relative; ">
                     <div class="profile-avatar" style="position: absolute; bottom: -50px; left: 20px;">
-                    <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">    
+                    <img src="@if($user->photo != '') {{asset('profile/photos/'.$user->photo)}} @else {{asset('img/user.png')}} @endif" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">    
                     <!--<img src="{{ $user->avatar ?? 'https://via.placeholder.com/150' }}" alt="Avatar" class="rounded-circle border border-4 border-white" width="150" height="150">-->
                     </div>
                     <div class="profile-actions" style="position: absolute; bottom: 20px; right: 20px;">
@@ -87,17 +87,22 @@
                     <div class="card mb-3" style="cursor:pointer;" onclick="window.location.href='{{ route('publicaciones.publicacion', ['id' => $publi->publ_id]) }}'">
                         <div class="card-body">
                             <div class="d-flex">
-                                <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
+                                <img src="@if($publi->user->photo != '') {{asset('profile/photos/'.$publi->user->photo)}} @else {{asset('img/user.png')}} @endif" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
                                 <div class="w-100">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <div>
-                                            <strong>{{ $publi->user->name }}</strong>
+                                            <strong>{{ $publi->user->username }}</strong>
                                             <span class="text-muted ml-2">· 2h</span>
                                         </div>
                                         <button class="btn btn-sm text-muted"><i class="fas fa-ellipsis-h"></i></button>
                                     </div>
                                     <strong> {{ $publi->tittle }}</strong>
                                     <p class="mb-2"> {{ $publi->publ_comentario }}</p>
+                                    <div class="content_publi_img">
+                                        @foreach($publi->publi_img as $img_publ)
+                                        <img src="{{asset('publicaciones/imagenes/'.$img_publ->photo)}}" alt="" class="photo_publ">
+                                        @endforeach
+                                    </div>
                                     <div class="d-flex justify-content-between text-muted mt-3">
                                         <button class="btn btn-sm text-muted"><i class="far fa-comment"></i> {{$publi->comentarios->count()}}</button>
                                         <button class="btn btn-sm text-muted"><i class="far fa-heart"></i>{{$publi->likes->count()}}</button>
@@ -135,9 +140,24 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            
+            
             <form method="POST" action="" enctype="multipart/form-data" id="form_update">
                 @csrf
-                @method('PUT')
+         
+
+                <div class="perfil-img-center position-relative mb-3">
+                    <img src="@if($user->photo != '') {{asset('profile/photos/'.$user->photo)}} @else {{asset('img/user.png')}} @endif" alt="Usuario" class="rounded-circle mr-3">
+
+                     <label for="foto_input" class="position-absolute text-white bg-dark px-2 py-1 rounded small"
+           style="bottom: 10px; left: 50%; transform: translateX(-50%); cursor: pointer;">
+        Cambiar  <i class="fas fa-pencil-alt me-1"></i>
+    </label>
+
+    <!-- Input oculto -->
+    <input type="file" id="foto_input" name="foto" accept="image/*" class="d-none">
+                </div>
+
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="name">Nombre</label>
@@ -149,20 +169,21 @@
                     </div>
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input id="username" type="username" class="form-control" name="username" value="{{ $user->username }}">
+                        <input id="username" type="text" class="form-control" name="username" value="{{ $user->username }}">
                     </div>
-                    
                     <div class="form-group">
-                        <label for="username">Teléfono</label>
+                        <label for="phone">Teléfono</label>
                         <input type="text" class="form-control" id="phone" name="phone" value="{{ $user->phone }}">
                     </div>
-                   
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary rounded-pill" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary rounded-pill">Guardar cambios</button>
                 </div>
             </form>
+
+
         </div>
     </div>
 </div>
@@ -182,20 +203,19 @@
         });
 
 
-        $('#form_update').submit(function(e) {
+        $('#form_update').submit(function (e) {
             e.preventDefault();
-            
+
+            let form = document.getElementById('form_update');
+            let formData = new FormData(form); // recoge todos los campos, incluyendo el archivo
+
             $.ajax({
                 url: '{{ route('profile.update') }}',
                 method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    name: $("#name").val(),
-                    last_name: $("#last_name").val(),
-                    username: $("#username").val(),
-                    phone: $("#phone").val(),
-                },
-                success: function(response) {
+                data: formData,
+                processData: false, // importante para que jQuery no procese los datos
+                contentType: false, // importante para que jQuery no establezca Content-Type
+                success: function (response) {
                     Swal.fire({
                         icon: 'success',
                         title: '¡Éxito!',
@@ -205,20 +225,18 @@
                     });
                     setTimeout(() => location.reload(), 1500);
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     let errors = xhr.responseJSON?.errors;
                     let errorMessage = '';
 
-                    // Limpia errores previos y resetea estilos
                     $('.invalid-feedback').remove();
                     $('.is-invalid').removeClass('is-invalid');
 
                     if (errors) {
-                        // Muestra errores debajo de cada campo
-                        $.each(errors, function(field, messages) {
-                            let inputField = $(`#${field}`); // Busca el campo por ID
+                        $.each(errors, function (field, messages) {
+                            let inputField = $(`#${field}`);
                             if (inputField.length) {
-                                inputField.addClass('is-invalid'); // Añade clase Bootstrap para error
+                                inputField.addClass('is-invalid');
                                 inputField.after(
                                     `<div class="invalid-feedback text-danger">${messages.join('<br>')}</div>`
                                 );
@@ -227,7 +245,6 @@
                             }
                         });
 
-                        // Si hay errores globales (no asociados a un campo)
                         if (errorMessage) {
                             Swal.fire({
                                 icon: 'error',
@@ -247,6 +264,7 @@
                 }
             });
         });
+
     });
 </script>
 @endsection

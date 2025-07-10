@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('home.home');
+    $user = Auth::user();
+    return view('home.home',compact('user'));
 })
 ->name('inicio')
 ->middleware('auth');
@@ -39,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Rutas de publicaciones y comentarios (protegidas)
 Route::middleware(['auth'])->group(function () {
-    Route::post('/publicaciones', 'PublicacioneController@store')->name('publicaciones.store');
+    Route::post('/publicaciones/store', 'PublicacioneController@store')->name('publicaciones.store');
     Route::get('/publicacion/{id}', 'PublicacioneController@publicacion')->name('publicaciones.publicacion');
     Route::post('/comentario/create', 'ComentarioController@create')->name('comentario.create');
     Route::post('/comentario/delete', 'ComentarioController@delete')->name('comentario.delete');

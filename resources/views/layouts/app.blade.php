@@ -20,11 +20,29 @@
 </head>
 <body>
     <div class="container-fluid">
+        <!-- Barra superior -->
+     @auth
+        <div class="row bg-light py-2 align-items-center border-bottom" id="div-search">
+            <div class="col-2 d-md-none">
+                <button id="toggleSidebar" class="btn btn-outline-secondary btn-sm">
+                    ☰
+                </button>
+            </div>
+            <div class="col-10 col-md-12">
+                <form class="d-flex w-100" role="search">
+                    <input class="form-control form-control-sm me-2 input-search" type="search" placeholder="Buscar..." aria-label="Buscar" >
+                    <button class="btn btn-sm btn-outline-secondary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
         <div class="row">
             <!-- Sidebar izquierdo -->
-           @auth
-            <!-- Sidebar izquierdo -->
-            <div class="col-md-2 col-lg-2 d-none d-md-block bg-dark sidebar vh-100 sticky-top">
+           
+            <div id="sidebar" class="col-md-2 col-lg-2 bg-dark sidebar vh-100 sticky-top d-none d-md-block">
                 <div class="sidebar-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item mb-4">
@@ -56,8 +74,9 @@
                     
                     <div class="dropdown mt-5">
                         <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#" id="dropdownUser1" data-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ Auth::user()->imagen_perfil ? asset('storage/'.Auth::user()->imagen_perfil) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=random' }}" 
-                                alt="{{ Auth::user()->name }}" 
+               
+                            <img src="{{ Auth::user()->photo ? asset('profile/photos/'.Auth::user()->photo) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=random' }}" 
+                                alt="{{ Auth::user()->username }}" 
                                 width="32" 
                                 height="32" 
                                 class="rounded-circle mr-2">
@@ -79,29 +98,28 @@
                     </div>
                 </div>
             </div>
-        @endauth
-            
+            @endauth
+
             <!-- Contenido principal -->
-       
-            <main role="main" class="col-md-10 col-lg-10 ml-sm-auto px-md-4 py-4">
+            <main role="main" class="col-md-10 col-lg-10 px-md-4 py-4" id="mainContent">
                 @yield('content')
             </main>
-            
-            
         </div>
     </div>
 
-  
-
-     <!-- jQuery primero -->
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Mostrar/ocultar sidebar en móvil
+        $('#toggleSidebar').on('click', function () {
+            $('#sidebar').toggleClass('d-none');
+        });
+    </script>
+
     @yield('scripts')
 </body>
 </html>

@@ -7,6 +7,30 @@ body {
     padding-left: 1rem;
     padding-right: 1rem;
 }
+.content_publi_img{
+display: flex;
+    justify-content: center;
+}
+.content_publi_img img {
+    max-width: 200px;
+    
+}
+
+#div-search{
+    background-color: #343a40 !important;
+}
+.input-search{
+    max-width: 200px;
+}
+.perfil-img-center {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative; /* necesario para posicionar el botón Cambiar */
+}
+.perfil-img-center img {
+    width: 200px;
+}
 
 .nav-link {
     border-radius: 30px;

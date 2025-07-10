@@ -7,21 +7,35 @@
 <div class="card mb-4">
     <div class="card-body">
         <div class="d-flex">
-            <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
+            <img src="@if($user->photo != '') {{ asset('profile/photos/'.$user->photo) }} @else {{ asset('img/user.png') }} @endif"
+                alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
+
             <div class="w-100">
-                <input type="text" class="form-control" name="tittle" id="tittle" placeholder="Titulo" style="width:50%;">
-                <textarea class="form-control border-0" rows="3" placeholder="¿Qué está pasando?" id="contenido"></textarea>
+                <input type="text" class="form-control mb-2" name="tittle" id="tittle" placeholder="Título" style="width:50%;">
+                <textarea class="form-control" rows="3" placeholder="¿Qué está pasando?" id="contenido"></textarea>
+
+                <!-- Contenedor para vista previa -->
+                <div id="preview-container" class="mt-3" style="display: none;">
+                    <img id="preview-image" src="#" alt="Vista previa" class="img-fluid rounded" style="max-height: 300px;">
+                </div>
+
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div>
-                        <button class="btn btn-sm text-primary"><i class="far fa-image"></i></button>
-                        <button class="btn btn-sm text-primary"><i class="fas fa-poll"></i></button>
-                        <button class="btn btn-sm text-primary"><i class="far fa-smile"></i></button>
-                        <button class="btn btn-sm text-primary"><i class="far fa-calendar-alt"></i></button>
+                        <!-- Botón con ícono para cargar imagen -->
+                        <button type="button" class="btn btn-sm text-primary" title="Subir Imagen" id="uploadTrigger">
+                            <i class="far fa-image"></i>
+                        </button>
+
+                        <!-- Input de archivo oculto -->
+                        <input type="file" id="imageInput" name="image" accept="image/*" class="d-none">
                     </div>
+
                     <button class="btn btn-primary rounded-pill px-4">Publicar</button>
                 </div>
             </div>
         </div>
+
+
     </div>
 </div>
 
@@ -30,17 +44,22 @@
   <div class="card mb-3" style="cursor:pointer;" onclick="window.location.href='{{ route('publicaciones.publicacion', ['id' => $publi->publ_id]) }}'">
       <div class="card-body">
           <div class="d-flex">
-              <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
+              <img src="@if($publi->user->photo != '') {{asset('profile/photos/'.$publi->user->photo)}} @else {{asset('img/user.png')}} @endif" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
               <div class="w-100">
                   <div class="d-flex justify-content-between align-items-center mb-1">
                       <div>
-                          <strong>{{ $publi->user->name }}</strong>
+                          <strong>{{ $publi->user->username }}</strong>
                           <span class="text-muted ml-2">· 2h</span>
                       </div>
                       <button class="btn btn-sm text-muted"><i class="fas fa-ellipsis-h"></i></button>
                   </div>
                   <strong> {{ $publi->tittle }}</strong>
                   <p class="mb-2"> {{ $publi->publ_comentario }}</p>
+                    <div class="content_publi_img">
+                        @foreach($publi->publi_img as $img_publ)
+                        <img src="{{asset('publicaciones/imagenes/'.$img_publ->photo)}}" alt="" class="photo_publ">
+                        @endforeach
+                    </div>
                   <div class="d-flex justify-content-between text-muted mt-3">
                       <button class="btn btn-sm text-muted"><i class="far fa-comment"></i>{{$publi->comentarios->count()}}</button>
                     
@@ -55,14 +74,37 @@
 @section('scripts')
   <script>
     $(document).ready(function() {
-    $('.btn-primary').click(function(e) {
+      
+        // Al hacer clic en el ícono de imagen
+        $('#uploadTrigger').on('click', function () {
+            $('#imageInput').click();
+        });
+
+        // Al seleccionar un archivo
+        $('#imageInput').on('change', function (e) {
+            const file = e.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#preview-image').attr('src', e.target.result);
+                    $('#preview-container').show();
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                $('#preview-container').hide();
+            }
+        });
+   
+    $('.btn-primary').click(function (e) {
         e.preventDefault();
-        
-        // Obtener el contenido del textarea
-        var contenido = $('#contenido').val().trim();
-        var tittle = $('#tittle').val().trim();
-        
-        // Verificar que el contenido no esté vacío
+
+        let contenido = $('#contenido').val().trim();
+        let tittle = $('#tittle').val().trim();
+        let imagen = $('#imageInput')[0].files[0]; // obtener el archivo si existe
+
         if (contenido === '') {
             Swal.fire({
                 icon: 'warning',
@@ -77,26 +119,31 @@
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops...',
-                text: 'Por favor escribe un titulo',
+                text: 'Por favor escribe un título',
                 confirmButtonColor: '#3085d6',
             });
             return;
         }
-        
-        // Enviar la solicitud AJAX
+
+        // Crear objeto FormData
+        let formData = new FormData();
+        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('comentario', contenido);
+        formData.append('tittle', tittle);
+        if (imagen) {
+            formData.append('imagen', imagen);
+        }
+
         $.ajax({
             url: '{{ route("publicaciones.store") }}',
             method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                comentario: contenido,
-                tittle:tittle,
-            },
-            success: function(response) {
-                // Limpiar el textarea después de publicar
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
                 $('.form-control').val('');
-                
-                // Mostrar mensaje de éxito con SweetAlert
+                $('#preview-container').hide(); // Ocultar vista previa
+
                 Swal.fire({
                     icon: 'success',
                     title: '¡Éxito!',
@@ -104,14 +151,10 @@
                     showConfirmButton: false,
                     timer: 1500
                 });
-                
-                // Recargar después de 1.5 segundos
-                setTimeout(() => {
-                    location.reload();
-                }, 1500);
+
+                setTimeout(() => location.reload(), 1500);
             },
-            error: function(xhr) {
-                // Mostrar mensaje de error con SweetAlert
+            error: function (xhr) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -121,6 +164,7 @@
             }
         });
     });
+
 
  
 });

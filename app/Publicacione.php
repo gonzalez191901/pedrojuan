@@ -24,4 +24,9 @@ class Publicacione extends Model
     {
         return $this->hasMany(Like::class, 'id_publicacion' , 'publ_id');
     }
+
+    public function publi_img()
+    {
+        return $this->hasMany(PublicacionImg::class, 'publ_id' , 'publ_id');
+    }
 }

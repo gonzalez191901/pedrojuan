@@ -7,9 +7,9 @@
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
             <div class="d-flex align-items-start mb-3">
-                <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
+                <img src="@if($publicacion->user->photo != '') {{asset('profile/photos/'.$publicacion->user->photo)}} @else {{asset('img/user.png')}} @endif" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
                 <div>
-                    <h5 class="mb-1">{{ $publicacion->user->name }}</h5>
+                    <h5 class="mb-1">{{ $publicacion->user->username }}</h5>
                     <small class="text-muted">{{ $publicacion->created_at->diffForHumans() }}</small>
                 </div>
             </div>
@@ -17,9 +17,11 @@
             <h4 class="card-title">{{ $publicacion->tittle }}</h4>
             <p class="card-text">{{ $publicacion->publ_comentario }}</p>
 
-            <div>
-
-            </div>
+            <div class="content_publi_img">
+                        @foreach($publicacion->publi_img as $img_publ)
+                        <img src="{{asset('publicaciones/imagenes/'.$img_publ->photo)}}" alt="" class="photo_publ">
+                        @endforeach
+                    </div>
         
             <div class="d-flex justify-content-between align-items-center mt-3">
                 <div class="btn-group">
@@ -66,10 +68,10 @@
         <div class="card mb-3 shadow-sm" id="div_comentario_{{$comentario->come_id}}">
             <div class="card-body">
                 <div class="d-flex align-items-start mb-2">
-                    <img src="{{ asset('img/user.png') }}" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
+                    <img src="@if($comentario->user->photo != '') {{asset('profile/photos/'.$comentario->user->photo)}} @else {{asset('img/user.png')}} @endif" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="mb-0">{{ $comentario->user->name }}</h6>
+                            <h6 class="mb-0">{{ $comentario->user->username }}</h6>
                             <small class="text-muted">{{ $comentario->created_at->diffForHumans() }}</small>
                         </div>
                         <p class="mb-2 mt-2">{{ $comentario->come_comentario }}</p>
