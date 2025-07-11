@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-06-2025 a las 05:17:14
+-- Tiempo de generación: 11-07-2025 a las 06:36:00
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.4
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `pedro_new`
+-- Base de datos: `pedrogual`
 --
 
 -- --------------------------------------------------------
@@ -82,7 +82,9 @@ INSERT INTO `comentarios` (`come_id`, `come_id_user`, `come_comentario`, `come_p
 (14, 5, 'Lorem', 9, '2025-06-07 17:29:23', '2025-06-07 17:29:23'),
 (15, 5, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 9, '2025-06-07 17:29:32', '2025-06-07 17:29:32'),
 (22, 1, 'rthrhrt', 3, '2025-06-18 07:15:23', '2025-06-18 07:15:23'),
-(23, 1, 'fghjhfghj', 11, '2025-06-18 07:16:19', '2025-06-18 07:16:19');
+(23, 1, 'fghjhfghj', 11, '2025-06-18 07:16:19', '2025-06-18 07:16:19'),
+(24, 1, 'muy buenos', 16, '2025-07-10 06:50:49', '2025-07-10 06:50:49'),
+(26, 7, 'primer comantario', 16, '2025-07-11 07:46:59', '2025-07-11 07:46:59');
 
 -- --------------------------------------------------------
 
@@ -121,7 +123,10 @@ INSERT INTO `likes` (`id`, `id_usuario`, `id_publicacion`, `created_at`, `update
 (12, 1, 1, '2025-06-18 06:29:43', '2025-06-18 06:29:43'),
 (13, 1, 9, '2025-06-18 07:13:07', '2025-06-18 07:13:07'),
 (14, 1, 3, '2025-06-18 07:15:07', '2025-06-18 07:15:07'),
-(15, 1, 11, '2025-06-18 07:16:20', '2025-06-18 07:16:20');
+(15, 1, 11, '2025-06-18 07:16:20', '2025-06-18 07:16:20'),
+(16, 1, 10, '2025-07-10 05:02:36', '2025-07-10 05:02:36'),
+(18, 1, 16, '2025-07-11 07:40:27', '2025-07-11 07:40:27'),
+(19, 7, 9, '2025-07-11 08:25:59', '2025-07-11 08:25:59');
 
 -- --------------------------------------------------------
 
@@ -146,7 +151,10 @@ INSERT INTO `likes_comentarios` (`id`, `id_comentario`, `id_usuario`, `created_a
 (3, 15, 1, '2025-06-18 06:58:19', '2025-06-18 06:58:19'),
 (4, 14, 1, '2025-06-18 06:58:21', '2025-06-18 06:58:21'),
 (5, 17, 1, '2025-06-18 07:10:33', '2025-06-18 07:10:33'),
-(6, 20, 1, '2025-06-18 07:14:55', '2025-06-18 07:14:55');
+(6, 20, 1, '2025-06-18 07:14:55', '2025-06-18 07:14:55'),
+(7, 23, 1, '2025-07-10 05:03:14', '2025-07-10 05:03:14'),
+(8, 24, 1, '2025-07-10 06:50:52', '2025-07-10 06:50:52'),
+(9, 24, 7, '2025-07-11 07:46:42', '2025-07-11 07:46:42');
 
 -- --------------------------------------------------------
 
@@ -211,7 +219,37 @@ INSERT INTO `publicaciones` (`publ_id`, `publ_comentario`, `publ_id_user`, `titt
 (8, 'tyurtuui', 5, 'tytyty', '2025-06-07 17:15:31', '2025-06-07 17:15:31'),
 (9, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 5, 'Titulo Lorem', '2025-06-07 17:29:14', '2025-06-07 17:29:14'),
 (10, 'hablale', 1, 'tengo sueño', '2025-06-18 07:15:48', '2025-06-18 07:15:48'),
-(11, '34t43t', 1, '34tr34t', '2025-06-18 07:16:07', '2025-06-18 07:16:07');
+(11, '34t43t', 1, '34tr34t', '2025-06-18 07:16:07', '2025-06-18 07:16:07'),
+(12, 'tghjntyhj', 1, 'rthrtht', '2025-07-10 06:03:57', '2025-07-10 06:03:57'),
+(13, 'gggg', 1, 'gg', '2025-07-10 06:34:26', '2025-07-10 06:34:26'),
+(14, 'gggg', 1, 'gg', '2025-07-10 06:35:28', '2025-07-10 06:35:28'),
+(15, 'rthrth', 1, 'hrthr', '2025-07-10 06:36:13', '2025-07-10 06:36:13'),
+(16, 'los mejores', 1, 'Mis profesores', '2025-07-10 06:50:33', '2025-07-10 06:50:33'),
+(17, 'mi primer post', 7, 'Nuevo Post', '2025-07-11 07:43:38', '2025-07-11 07:43:38'),
+(18, 'tytyjt', 7, 'tyjtyj', '2025-07-11 07:57:29', '2025-07-11 07:57:29');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `publicacion_img`
+--
+
+CREATE TABLE `publicacion_img` (
+  `id` int(11) NOT NULL,
+  `publ_id` int(11) NOT NULL,
+  `photo` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `publicacion_img`
+--
+
+INSERT INTO `publicacion_img` (`id`, `publ_id`, `photo`, `created_at`, `updated_at`) VALUES
+(1, 14, '14.jpeg', '2025-07-10 02:35:28', '2025-07-10 02:35:28'),
+(2, 15, '15.jpeg', '2025-07-10 02:36:13', '2025-07-10 02:36:13'),
+(3, 16, '16.jpeg', '2025-07-10 02:50:33', '2025-07-10 02:50:33');
 
 -- --------------------------------------------------------
 
@@ -232,20 +270,22 @@ CREATE TABLE `users` (
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `fecha_nacimiento` date NOT NULL,
   `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `carrera_id` int(11) NOT NULL
+  `carrera_id` int(11) NOT NULL,
+  `photo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `last_name`, `phone`, `fecha_nacimiento`, `username`, `carrera_id`) VALUES
-(1, 'oscar', 'gonzalez191901@gmail.com', NULL, '$2y$10$mNalV7WGNcIq7ln1isF2C.0dacnma.hjibNX/0dlvI6yamE3z4ViS', 'bj8QbjmYpfKHeUBzgDFq7xNnrnLinqikCm356M0CH07v8AJfVi178PWtcenK', '2025-06-02 01:59:42', '2025-06-02 01:59:42', '', '', '0000-00-00', '', 0),
-(2, 'oscar', 'gonzalez191902@gmail.com', NULL, '$2y$10$oNKYVjgq18Ub2WbC/qJqVujRO6FiKmwCg7XrQff.teMGk622bHqc.', NULL, '2025-06-07 16:36:02', '2025-06-07 16:36:02', 'gonzalez', '042429634345', '1997-08-31', '', 4),
-(3, 'oscar', 'gonzalez191903@gmail.com', NULL, '$2y$10$JhwhITud899JeVQFUD1vS.XoiKNzT5/nETVWj/PsAMPpzqSDRQ7/y', NULL, '2025-06-07 16:38:45', '2025-06-07 16:38:45', 'gonzalez', '042429634345', '1997-08-31', '', 3),
-(4, 'ertert', 'hhhh@gmail.com', NULL, '$2y$10$iiC8vlAF5YYMStGdJo.zNOak4Bx04G53gk/0oYESNCkLcY6qIItb2', NULL, '2025-06-07 16:40:01', '2025-06-07 16:40:01', 'rtertert', '123123123', '2005-01-01', '', 2),
-(5, 'johany', 'Johany321@gmail.com', NULL, '$2y$10$CQZCXK3v/liMLDNW9.Y4Ke7ZHRJcCE9Jahr49AsXwY7fAX5kPcENC', NULL, '2025-06-07 16:50:32', '2025-06-07 16:50:32', 'Mora', '04126585986', '1999-12-03', '', 1),
-(6, 'oscar', 'ogonza01@gmail.com', NULL, '$2y$10$dl4HVV6V5NLdKpLRVH4zIeB1OLU6rpiKzXgPCLG1UOA/jjykGeCVm', NULL, '2025-06-17 06:56:53', '2025-06-17 06:56:53', 'gonzalez', '04242963435', '1997-08-31', 'ogonza01', 1);
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `last_name`, `phone`, `fecha_nacimiento`, `username`, `carrera_id`, `photo`) VALUES
+(1, 'oscar', 'gonzalez191901@gmail.com', NULL, '$2y$10$mNalV7WGNcIq7ln1isF2C.0dacnma.hjibNX/0dlvI6yamE3z4ViS', '2TESoLUXtDdJXqpcQJl7xqYcOIC2iECDkGzb29vRmrJx5UYU0zfLO2Efgy14', '2025-06-02 01:59:42', '2025-07-10 05:40:38', 'gonzalez', '4242963435', '0000-00-00', 'ogonza08', 0, '1.jpg'),
+(2, 'oscar', 'gonzalez191902@gmail.com', NULL, '$2y$10$oNKYVjgq18Ub2WbC/qJqVujRO6FiKmwCg7XrQff.teMGk622bHqc.', NULL, '2025-06-07 16:36:02', '2025-06-07 16:36:02', 'gonzalez', '042429634345', '1997-08-31', '', 4, ''),
+(3, 'oscar', 'gonzalez191903@gmail.com', NULL, '$2y$10$JhwhITud899JeVQFUD1vS.XoiKNzT5/nETVWj/PsAMPpzqSDRQ7/y', NULL, '2025-06-07 16:38:45', '2025-06-07 16:38:45', 'gonzalez', '042429634345', '1997-08-31', '', 3, ''),
+(4, 'ertert', 'hhhh@gmail.com', NULL, '$2y$10$iiC8vlAF5YYMStGdJo.zNOak4Bx04G53gk/0oYESNCkLcY6qIItb2', NULL, '2025-06-07 16:40:01', '2025-06-07 16:40:01', 'rtertert', '123123123', '2005-01-01', '', 2, ''),
+(5, 'johany', 'Johany321@gmail.com', NULL, '$2y$10$CQZCXK3v/liMLDNW9.Y4Ke7ZHRJcCE9Jahr49AsXwY7fAX5kPcENC', NULL, '2025-06-07 16:50:32', '2025-06-07 16:50:32', 'Mora', '04126585986', '1999-12-03', '', 1, ''),
+(6, 'oscar', 'ogonza01@gmail.com', NULL, '$2y$10$dl4HVV6V5NLdKpLRVH4zIeB1OLU6rpiKzXgPCLG1UOA/jjykGeCVm', NULL, '2025-06-17 06:56:53', '2025-06-17 06:56:53', 'gonzalez', '04242963435', '1997-08-31', 'ogonza01', 1, ''),
+(7, 'omar', 'omar34@gmail.com', NULL, '$2y$10$apI5Xb0Vch.aMhUwDG9QFe2Gryk1Uvb8tI6rgoYm/F6qe6Pu6xZ52', NULL, '2025-07-11 07:43:04', '2025-07-11 07:43:19', 'ghgh', '4242963435', '1997-08-31', 'omar34', 1, '7.png');
 
 --
 -- Índices para tablas volcadas
@@ -300,6 +340,12 @@ ALTER TABLE `publicaciones`
   ADD PRIMARY KEY (`publ_id`);
 
 --
+-- Indices de la tabla `publicacion_img`
+--
+ALTER TABLE `publicacion_img`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
@@ -320,7 +366,7 @@ ALTER TABLE `carreras`
 -- AUTO_INCREMENT de la tabla `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `come_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `come_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`
@@ -332,13 +378,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT de la tabla `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `likes_comentarios`
 --
 ALTER TABLE `likes_comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
@@ -350,13 +396,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT de la tabla `publicaciones`
 --
 ALTER TABLE `publicaciones`
-  MODIFY `publ_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `publ_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT de la tabla `publicacion_img`
+--
+ALTER TABLE `publicacion_img`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

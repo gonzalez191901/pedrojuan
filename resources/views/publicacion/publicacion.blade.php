@@ -9,7 +9,8 @@
             <div class="d-flex align-items-start mb-3">
                 <img src="@if($publicacion->user->photo != '') {{asset('profile/photos/'.$publicacion->user->photo)}} @else {{asset('img/user.png')}} @endif" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
                 <div>
-                    <h5 class="mb-1">{{ $publicacion->user->username }}</h5>
+                    <a href="{{ route('profile', ['username' =>  $publicacion->user->id]) }}"><h5 class="mb-1">{{ $publicacion->user->username }}</h5></a>
+                    
                     <small class="text-muted">{{ $publicacion->created_at->diffForHumans() }}</small>
                 </div>
             </div>
@@ -71,7 +72,8 @@
                     <img src="@if($comentario->user->photo != '') {{asset('profile/photos/'.$comentario->user->photo)}} @else {{asset('img/user.png')}} @endif" alt="Usuario" width="50" height="50" class="rounded-circle mr-3">
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="mb-0">{{ $comentario->user->username }}</h6>
+                            <a href="{{ route('profile', ['username' =>  $comentario->user->id]) }}"><h6 class="mb-0">{{ $comentario->user->username }}</h6></a>
+                            
                             <small class="text-muted">{{ $comentario->created_at->diffForHumans() }}</small>
                         </div>
                         <p class="mb-2 mt-2">{{ $comentario->come_comentario }}</p>

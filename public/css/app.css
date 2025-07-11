@@ -15,6 +15,16 @@ display: flex;
     max-width: 200px;
     
 }
+.populares a{
+    color: #333333;
+}
+.div-populares{
+    display: flex;
+    justify-content: space-between;
+}
+.div-populares span i{
+    color:red;
+}
 
 #div-search{
     background-color: #343a40 !important;

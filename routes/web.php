@@ -2,10 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Publicacione;
 
 Route::get('/', function () {
     $user = Auth::user();
-    return view('home.home',compact('user'));
+    $populares = Publicacione::withCount('likes')
+    ->orderBy('likes_count', 'desc')
+    ->take(10)
+    ->get();
+    return view('home.home',compact('user','populares'));
 })
 ->name('inicio')
 ->middleware('auth');
@@ -37,6 +42,10 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile/{username}', 'ProfileController@show')->name('profile');
     Route::post('/profile/update', 'ProfileController@update')->name('profile.update');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/search', 'ProfileController@search')->name('profile.search');
 });
 
 // Rutas de publicaciones y comentarios (protegidas)

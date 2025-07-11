@@ -29,8 +29,8 @@
                 </button>
             </div>
             <div class="col-10 col-md-12">
-                <form class="d-flex w-100" role="search">
-                    <input class="form-control form-control-sm me-2 input-search" type="search" placeholder="Buscar..." aria-label="Buscar" >
+                <form class="d-flex w-100" role="search" method="get" action="{{route('profile.search')}}">
+                    <input class="form-control form-control-sm me-2 input-search" type="search" placeholder="Buscar..." aria-label="Buscar" name="search_user">
                     <button class="btn btn-sm btn-outline-secondary" type="submit">
                         <i class="fas fa-search"></i>
                     </button>

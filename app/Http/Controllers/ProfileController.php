@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use App\User;
 
 class ProfileController extends Controller
 {
@@ -65,6 +66,13 @@ class ProfileController extends Controller
         return response()->json([
             'message' => 'Perfil actualizado correctamente',
         ]);
+    }
+
+    public function search(Request $request){
+
+        $user = User::where('username', 'like', '%' . $request->search_user . '%')->get();
+
+        return view('user.search',compact('user'));
     }
 
 }
